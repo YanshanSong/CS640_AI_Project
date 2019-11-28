@@ -19,7 +19,7 @@ class Video:
 
     def extract_images_from_video(self):
         # if not exists,
-        # create a directory storing images extracted from the current video in the "repository" directory
+        # create a directory in the "repository" directory to store images extracted from the current video
         image_directory_path = os.path.join(self.image_repository_path, self.video_name)
         if not os.path.exists(image_directory_path):
             os.mkdir(image_directory_path)
