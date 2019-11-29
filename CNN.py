@@ -3,6 +3,7 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.utils import to_categorical
+import mnist
 
 def cnnModel(X_train, y_train, X_Test, y_test):
     num_filters = 8
@@ -30,3 +31,11 @@ def cnnModel(X_train, y_train, X_Test, y_test):
     model.fit(X_train, to_categorical(y_train), epochs=5)
 
     model.evaluate(X_Test, to_categorical(y_test))
+
+train_images = mnist.train_images()
+train_labels = mnist.train_labels()
+
+test_images = mnist.test_images()
+test_labels = mnist.test_labels()
+
+cnnModel(train_images, train_labels, test_images, test_labels)
