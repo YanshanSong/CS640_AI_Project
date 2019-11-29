@@ -9,9 +9,13 @@ class Preprocess:
     def __init__(self):
         self.images = []
 
-        self.train_data_directory = os.path.join("data", "train")
-        if not os.path.exists(self.train_data_directory):
-            os.makedirs(self.train_data_directory)
+        self.data_directory = "data"
+        if not os.path.exists(self.data_directory):
+            os.mkdir(self.data_directory)
+
+        self.data_image_directory = os.path.join(self.data_directory, "image")
+        if not os.path.exists(self.data_image_directory):
+            os.mkdir(self.data_image_directory)
 
     def get_all_images(self):
         with open("640ProjectData/Labels.csv", "r") as csvFile:
@@ -22,33 +26,34 @@ class Preprocess:
                 video_label = reader[i][1]
                 video = Video(video_name, video_label)
                 self.images.extend(video.get_video_images())
+        return self.images
 
-    def get_train_data(self):
-        X_train_path = os.path.join(self.train_data_directory, "X_train.npy")
-        y_train_path = os.path.join(self.train_data_directory, "y_train.npy")
+    def get_all_data(self):
+        X_path = os.path.join(self.data_directory, "X.npy")
+        y_path = os.path.join(self.data_directory, "y.npy")
 
-        if not os.path.exists(X_train_path):
+        if not os.path.exists(X_path):
             self.get_all_images()
-            X_train_list = []
-            y_train_list = []
+            X_list = []
+            y_list = []
             for image in self.images:
                 if image.face_recognize():
-                    X_train_list.append(image.get_normalized_data())
-                    y_train_list.append(image.image_label)
+                    X_list.append(image.get_normalized_data())
+                    y_list.append(image.image_label)
 
-            X_train = np.array(X_train_list)
-            y_train = np.array(y_train_list).reshape(len(y_train_list), 1)
-            np.save(X_train_path, X_train)
-            np.save(y_train_path, y_train)
+            X = np.array(X_list)
+            y = np.array(y_list).reshape(len(y_list), 1)
+            np.save(X_path, X)
+            np.save(y_path, y)
         else:
-            X_train = np.load(X_train_path)
-            y_train = np.load(y_train_path)
+            X = np.load(X_path)
+            y = np.load(y_path)
 
-        return X_train, y_train
+        return X, y
 
 
 if __name__ == '__main__':
     preprocess = Preprocess()
-    X_train, y_train = preprocess.get_train_data()
-    print(X_train)
-    print(y_train)
+    X, y = preprocess.get_all_data()
+    print(X)
+    print(y)

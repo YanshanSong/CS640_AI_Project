@@ -45,8 +45,8 @@ class Image:
             self.normalized_data = cv_img
 
             # save
-            self.image_path = os.path.join("data/train", self.image_path[10:].replace("/", "_"))
-            cv2.imwrite(self.image_path, cv_img)
+            # self.image_path = os.path.join("data/image", self.image_path[10:].replace("/", "_"))
+            # cv2.imwrite(self.image_path, cv_img)
 
         return self.valid
 
