@@ -1,8 +1,11 @@
+# directory
 __pycache__
 .idea
 640ProjectData
 repository
-data
 
+# file
 .DS_Store
-
+data/train/*
+!data/train/trainX.npy
+!data/train/trainY.npy

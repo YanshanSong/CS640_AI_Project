@@ -50,6 +50,3 @@ class Preprocess:
 if __name__ == '__main__':
     preprocess = Preprocess()
     trainX, trainY = preprocess.get_train_data()
-
-
-
