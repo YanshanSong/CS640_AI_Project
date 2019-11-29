@@ -24,29 +24,31 @@ class Preprocess:
                 self.images.extend(video.get_video_images())
 
     def get_train_data(self):
-        trainX_path = os.path.join(self.train_data_directory, "trainX.npy")
-        trainY_path = os.path.join(self.train_data_directory, "trainY.npy")
+        X_train_path = os.path.join(self.train_data_directory, "X_train.npy")
+        y_train_path = os.path.join(self.train_data_directory, "y_train.npy")
 
-        if not os.path.exists(trainX_path):
+        if not os.path.exists(X_train_path):
             self.get_all_images()
-            trainX_list = []
-            trainY_list = []
+            X_train_list = []
+            y_train_list = []
             for image in self.images:
                 if image.face_recognize():
-                    trainX_list.append(image.get_normalized_data())
-                    trainY_list.append(image.image_label)
+                    X_train_list.append(image.get_normalized_data())
+                    y_train_list.append(image.image_label)
 
-            trainX = np.array(trainX_list)
-            trainY = np.array(trainY_list).reshape(len(trainY_list), 1)
-            np.save(trainX_path, trainX)
-            np.save(trainY_path, trainY)
+            X_train = np.array(X_train_list)
+            y_train = np.array(y_train_list).reshape(len(y_train_list), 1)
+            np.save(X_train_path, X_train)
+            np.save(y_train_path, y_train)
         else:
-            trainX = np.load(trainX_path)
-            trainY = np.load(trainY_path)
+            X_train = np.load(X_train_path)
+            y_train = np.load(y_train_path)
 
-        return trainX, trainY
+        return X_train, y_train
 
 
 if __name__ == '__main__':
     preprocess = Preprocess()
-    trainX, trainY = preprocess.get_train_data()
+    X_train, y_train = preprocess.get_train_data()
+    print(X_train)
+    print(y_train)
