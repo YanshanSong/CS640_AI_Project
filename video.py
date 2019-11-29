@@ -5,7 +5,7 @@ from image import Image
 
 
 class Video:
-    def __init__(self, video_name, video_label):
+    def __init__(self, video_name, video_label=None):
         # if not exists, create "repository" repository
         self.image_repository_path = "repository"
         if not os.path.exists(self.image_repository_path):
