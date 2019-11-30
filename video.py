@@ -24,8 +24,7 @@ class Video:
         else:
             self.video_label = -1
 
-        self.videoCapture = cv2.VideoCapture(self.video_path)
-        self.valid = True
+        self.valid = False
         self.video_images = []
         self.normalized_data = None
 
@@ -36,13 +35,13 @@ class Video:
         if not os.path.exists(directory_path):
             os.mkdir(directory_path)
             print("Processing {}...".format(self.video_name))
-
-            fps = self.get_fps()
-
             # save images
             image_count = 0
             frame_count = 0
-            success, frame = self.videoCapture.read()
+            video_capture = cv2.VideoCapture(self.video_path)
+            # get fps
+            fps = video_capture.get(5)
+            success, frame = video_capture.read()
             while success:
                 frame_count += 1
                 if frame_count % math.ceil(fps) == 0:
@@ -51,7 +50,7 @@ class Video:
                     cv2.imwrite(image_path, frame)
                     image = Image(image_path)
                     self.video_images.append(image)
-                success, frame = self.videoCapture.read()
+                success, frame = video_capture.read()
         else:
             for root, dirs, files in os.walk(directory_path):
                 for file in files:
@@ -68,19 +67,16 @@ class Video:
             if video_image.face_recognize():
                 data_list.append(video_image.get_normalized_data())
             if len(data_list) == 5:
+                self.valid = True
+                self.normalized_data = np.array(data_list)
+                print(self.normalized_data.shape)
                 break
-
-        if len(data_list) == 5:
-            self.valid = True
-            self.normalized_data = np.array(data_list)
 
         return self.valid
 
     def get_normalized_data(self):
         return self.normalized_data
 
-    def get_fps(self):
-        return self.videoCapture.get(5)
 
     def get_video_label(self):
         return self.video_label

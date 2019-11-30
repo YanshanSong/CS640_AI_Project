@@ -39,6 +39,7 @@ def initData():
 
     return xy_train_normalized, labels_train, xy_test_normalized, labels_test
 
+
 def knnModel(X_train, y_train, X_Test, y_test):
     model = neighbors.KNeighborsClassifier(n_neighbors=5, weights='uniform', algorithm='auto', leaf_size=1, p=2, metric='minkowski')
     model.fit(X_train, y_train)
