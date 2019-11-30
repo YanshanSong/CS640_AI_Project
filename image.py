@@ -1,30 +1,29 @@
 import cv2
 import face_recognition
 import os
+import re
 
 
 class Image:
-    def __init__(self, image_path, image_label=None):
+    def __init__(self, image_path):
         self.image_path = image_path
+        self.index = int(re.findall(r"\d+", self.image_path.split("/")[-1])[0])
         self.normalized_data = None
-
-        if image_label:
-            if image_label == "Negative":
-                self.image_label = -1
-            elif image_label == "Neutral":
-                self.image_label = 0
-            else:
-                self.image_label = 1
-        else:
-            self.image_label = -2
-
         self.valid = False
+
+        self.data_directory_path = "data"
+        if not os.path.exists(self.data_directory_path):
+            os.mkdir(self.data_directory_path)
+
+        self.image_directory_path = os.path.join(self.data_directory_path, "image")
+        if not os.path.exists(self.image_path):
+            os.mkdir(self.image_directory_path)
+
+    def get_image_index(self):
+        return self.index
 
     def get_image_path(self):
         return self.image_path
-
-    def get_image_label(self):
-        return self.image_label
 
     def face_recognize(self):
         print("recognizing {}...".format(self.image_path))
@@ -45,8 +44,8 @@ class Image:
             self.normalized_data = cv_img
 
             # save
-            # self.image_path = os.path.join("data/image", self.image_path[10:].replace("/", "_"))
-            # cv2.imwrite(self.image_path, cv_img)
+            new_image_path = os.path.join(self.image_directory_path, self.image_path[11:].replace("/", "_"))
+            cv2.imwrite(new_image_path, cv_img)
 
         return self.valid
 
@@ -54,7 +53,4 @@ class Image:
         return self.normalized_data
 
 
-if __name__ == '__main__':
-    image = Image("repository/amy.4xD6Ec4g5N0.00.v.mp4/image_1.jpg")
-    image.face_recognize()
 
