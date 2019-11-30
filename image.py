@@ -52,5 +52,3 @@ class Image:
     def get_normalized_data(self):
         return self.normalized_data
 
-
-
