@@ -44,7 +44,7 @@ class Video:
             success, frame = video_capture.read()
             while success:
                 frame_count += 1
-                if frame_count % math.ceil(fps / 2) == 0:
+                if frame_count % math.floor(fps / 2) == 0:
                     image_count += 1
                     image_path = os.path.join(directory_path, "image_{}.jpg".format(image_count))
                     cv2.imwrite(image_path, frame)
