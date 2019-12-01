@@ -44,7 +44,7 @@ class Video:
             success, frame = video_capture.read()
             while success:
                 frame_count += 1
-                if frame_count % math.ceil(fps) == 0:
+                if frame_count % math.ceil(fps / 2) == 0:
                     image_count += 1
                     image_path = os.path.join(directory_path, "image_{}.jpg".format(image_count))
                     cv2.imwrite(image_path, frame)
@@ -66,10 +66,9 @@ class Video:
         for video_image in self.video_images:
             if video_image.face_recognize():
                 data_list.append(video_image.get_normalized_data())
-            if len(data_list) == 5:
+            if len(data_list) == 10:
                 self.valid = True
                 self.normalized_data = np.array(data_list)
-                print(self.normalized_data.shape)
                 break
 
         return self.valid
@@ -77,12 +76,12 @@ class Video:
     def get_normalized_data(self):
         return self.normalized_data
 
-
     def get_video_label(self):
         return self.video_label
 
 
-# if __name__ == '__main__':
-#     video = Video("640ProjectData/presidential_videos/donald.9Ct43xvDYDE.00.mp4")
-
+if __name__ == '__main__':
+    video = Video("640ProjectData/presidential_videos/donald.9Ct43xvDYDE.00.mp4")
+    rs = video.generate_normalized_data();
+    print(rs)
 
