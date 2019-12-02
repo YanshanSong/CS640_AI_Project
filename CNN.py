@@ -36,7 +36,7 @@ def cnnModel(X_train, y_train, X_Test, y_test):
         metrics=['accuracy']
     )
 
-    model.fit(X_train, y_train, epochs=25)
+    model.fit(X_train, y_train, epochs=30)
 
     score = model.evaluate(X_Test, y_test, verbose=0)
     print('Test loss:', score[0])
@@ -79,8 +79,6 @@ for train_index, test_index in kf.split(X):
     test_y = to_categorical(test_y, 3)
 
     cnnModel(train_X, train_y, test_X, test_y)
-    raw_input()
-
 
 # X_1 = X[0:4000]
 # y_1 = y[0:4000]

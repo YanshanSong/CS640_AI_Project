@@ -1,6 +1,9 @@
 from numpy.random import normal
 from sklearn import neighbors
+from sklearn.model_selection import KFold
+from skimage import feature as skft
 import numpy as np
+from preprocess import Preprocess
 
 def initData():
     x1 = normal(50, 6, 200)
@@ -45,7 +48,18 @@ def knnModel(X_train, y_train, X_Test, y_test):
     score = model.score(X_Test, y_test)
     print(score)
 
-X_train, y_train, X_Test, y_test = initData()
+#X_train, y_train, X_Test, y_test = initData()
 
-knnModel(X_train, y_train, X_Test, y_test)
+preprocess = Preprocess()
+X, y = preprocess.get_all_data()
+for i in range(X.shape[0]):
+    X[i] = skft.local_binary_pattern(X[i], 8, 1, 'default')
+
+X = X.reshape(X.shape[0], 48*48)
+y = y.reshape(y.shape[0],)
+kf = KFold(n_splits=10, shuffle=True)
+for train_index, test_index in kf.split(X):
+    train_X, train_y = X[train_index], y[train_index]
+    test_X, test_y = X[test_index], y[test_index]
+knnModel(train_X, train_y, test_X, test_y)
 
